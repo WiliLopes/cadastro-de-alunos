@@ -1,0 +1,59 @@
+lis_alunos = []
+
+while True: #laço principal
+    #validação do nome
+    while True:
+        nome = input("Digite o nome do aluno, por favor: ").strip().title()
+        if nome != "":
+            break
+        else:
+            print("O nome está inválido. Por favor, digite um nome válido.")
+
+    #validação da idade
+    while True:
+        idade = input("Digite a idade do aluno, por favor: ")
+        if idade.isdigit() and int(idade) > 0:
+            idade = int(idade)
+            break
+        else:
+            print("A idade do aluno está inválida. Por favor digite uma idade, válida")
+
+    #validação da nota
+    while True:
+        nota = input("Digite a nota do aluno, por favor: ")
+        try:
+            nota= float(nota)
+            if nota >= 0:
+                break
+            else:
+                print("A nota está inválida. Por favor, digite uma nota válida.")
+        except ValueError:
+            print("A entrada está inválida. Por favor, digite uma entrada válida.")
+
+    print("O nome, a idade e a nota do aluno foram cadastrada com sucesso!")
+
+    #processamento
+    dic_alunos = {"Nome": nome, "Idade": idade, "Nota": nota}
+    lis_alunos.append(dic_alunos)
+    print("Dicionário dos alunos feito com sucesso!")
+
+    print("Lista atual de alunos:")
+    for l in lis_alunos:
+        print(f"{l['Nome']} - {l['Idade']} - {l['Nota']}")
+
+    while True:
+        resposta = input("Você deseja cadastrar outro aluno? (S/N): ").strip().capitalize()
+        if resposta == "S":
+            break
+        elif resposta == "N":
+            print("Encerrando cadastro.")
+            print("Lista atual de alunos:")
+            for l in lis_alunos:
+                print(f"{l['Nome']} - {l['Idade']} - {l['Nota']}")
+
+                total_notas = sum(l['Nota'] for l in lis_alunos)
+                media = total_notas / len(lis_alunos)
+                print(f"\n Cadastro finalizado. A média da turma foi: {media:.2f}")
+                exit()
+        else:
+            print("Resposta inválida. Por favor, digite uma resposta válida.")
