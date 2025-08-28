@@ -1,0 +1,107 @@
+def nome_do_produto():
+    while True:
+        nome = input("Digite o nome do produto, por favor: ").strip().title()
+        if nome != "":
+            return nome
+        else:
+            print("O nome do produto está inválido. Por favor, digite um nome válido.")
+
+def categoria_do_produto():
+    while True:
+        print("....ESTÁ SÃO AS CATEGORIAS DOS PRODUTOS....")
+        print("1. Cereais\n 2. Frutas e verduras\n 3. Carnes\n 4. Produtos de limpeza\n 5. Bebidas")
+
+        categoria = input("Digite o númeto da categoria do produto, por favor: ").strip()
+
+        if categoria == "1":
+            print("O seu produto está na categoria dos cereais.")
+            return "Cereais"
+        elif categoria == "2":
+            print("O seu produto está na categoria das frutas e verduras.")
+            return "Frutas e verduras"
+        elif categoria == "3":
+            print("O seu produto está na categoria das carnes.")
+            return "Carnes"
+        elif categoria == "4":
+            print("O seu produto está na categoria dos produtos de limpeza.")
+            return "Produtos de limpeza"
+        elif categoria == "5":
+            print("O seu produto está na categoria das bebidas.")
+            return "Bebidas"
+        else:
+            print("Opção inválida. Por favor, digite uma opção válida.")
+            
+def preco_do_produto():
+    while True:
+        preco = input("Digite o valor do produto, por favor: ").strip()
+        try:
+            preco = float(preco)
+            if preco > 0:
+                return preco
+            else:
+                 print("Preço inválido. Por favor digite um preço válido")
+        except ValueError:
+            print("Entrada inválida. Por favor, digite uma entrada válida.")
+
+def cadastrar_produtos():
+    produtos = []
+    while True:
+        print("\n--- Novo Produto ---")
+        nome = nome_do_produto
+        categoria = categoria_do_produto
+        preco = preco_do_produto
+        produtos.append({"nome": nome, "categoria": categoria, "preco": preco})
+        cont = input("Deseja adicionar outro produto? (S/N): ").strip().lower()
+        if cont != "":
+            break
+    return produtos
+
+def filtrar_por_categoria(produtos, categoria):
+    return [p for p in produtos if p["categoria"] == categoria]
+
+def filtrar_por_preco(produtos, limite):
+    return [p for p in produtos if p["preco"] <= limite]
+
+def calcular_total(produtos):
+    return sum(p["preco"] for p in produtos)
+
+def mais_caro(produtos):
+    return max(produtos, key=lambda p: p["preco"], default=None)
+
+def mais_barato(produtos):
+    return min(produtos, key=lambda p: p["preco"], default=None)
+
+def menu_final(produtos):
+    print("\n--- Resumo da lista ---")
+    print(f"Total de produtos: {len(produtos)}")
+    print(f"Valor total da compra: R$ {calcular_total(produtos):.2f}")
+    maiscaro = mais_caro(produtos)
+    maisbarato = mais_barato(produtos)
+    if maiscaro:
+        print(f"Produto mais caro: {maiscaro['nome']} — R$ {maiscaro['preco']:.2f}")
+    if maisbarato:
+        print(f"Produto mais barato: {maisbarato['nome']} — R$ {maisbarato['preco']:.2f}")
+
+    cat = input("\nDeseja filtrar por categoria? (Digite o nome exato ou ENTER para pular): ").strip().title()
+    if cat:
+        filtro = filtrar_por_categoria(produtos, cat)
+        print(f"\nProdutos na categoria '{cat}':")
+        for p in filtro:
+            print(f"- {p['nome']} — R$ {p['preco']:.2f}")
+    preco_limite = input("\nDeseja filtrar por preço máximo? (Digite o valor ou ENTER para pular): ").strip().replace(",", ".")
+    if preco_limite:
+        try:
+            limite = float(preco_limite)
+            filtro = filtrar_por_preco(produtos, limite)
+            print(f"\nProdutos com preço até R$ {limite:.2f}:")
+            for p in filtro:
+                print(f"- {p['nome']} — R$ {p['preco']:.2f}")
+        except ValueError:
+            print("Valor inválido. Pulando filtro de preço.")
+
+# Programa principal
+produtos = cadastrar_produtos()
+if produtos:
+    menu_final(produtos)
+else:
+    print("Nenhum produto cadastrado.")
